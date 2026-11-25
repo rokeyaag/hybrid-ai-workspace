@@ -1,6 +1,9 @@
 # Hybrid AI Workspace
 
 > Built for **#BuildHybridAI 2026** — A privacy-first, offline-capable AI knowledge workspace powered by **Firebase AI Logic Hybrid Inference** (on-device Gemini Nano + automatic Cloud Gemini fallback).
+>
+> **Live Demo:** https://build-hybrid-ai-2026-df4d2.web.app  
+> **Demo & Devpost Guide:** [SUBMISSION_GUIDE.md](./SUBMISSION_GUIDE.md)
 
 ## Why Hybrid AI?
 

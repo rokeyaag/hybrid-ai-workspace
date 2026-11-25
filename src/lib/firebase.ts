@@ -2,6 +2,7 @@ import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
 import {
   initializeAppCheck,
   ReCaptchaEnterpriseProvider,
+  ReCaptchaV3Provider,
   type AppCheck,
 } from "firebase/app-check";
 import { getAuth, GoogleAuthProvider, type Auth } from "firebase/auth";
@@ -64,6 +65,9 @@ export function getFirebaseServices(): FirebaseServices {
   // Configure Firebase App Check (Mandatory for Firebase AI Logic)
   const debugTokenEnv = import.meta.env.VITE_FIREBASE_APPCHECK_DEBUG_TOKEN as string | undefined;
   const siteKey = import.meta.env.VITE_FIREBASE_APPCHECK_SITE_KEY as string | undefined;
+  const providerType =
+    (import.meta.env.VITE_FIREBASE_APPCHECK_PROVIDER as string | undefined)?.toLowerCase() ??
+    "v3";
   let appCheck: AppCheck | null = null;
   let appCheckMode: "recaptcha" | "debug" | "unconfigured" = "unconfigured";
 
@@ -78,8 +82,12 @@ export function getFirebaseServices(): FirebaseServices {
     }
 
     if (siteKey && siteKey.trim().length > 0) {
+      const provider =
+        providerType === "enterprise"
+          ? new ReCaptchaEnterpriseProvider(siteKey.trim())
+          : new ReCaptchaV3Provider(siteKey.trim());
       appCheck = initializeAppCheck(app, {
-        provider: new ReCaptchaEnterpriseProvider(siteKey.trim()),
+        provider,
         isTokenAutoRefreshEnabled: true,
       });
       if (appCheckMode !== "debug") {
@@ -88,7 +96,7 @@ export function getFirebaseServices(): FirebaseServices {
     } else if (appCheckMode === "debug") {
       // Uses placeholder key when debug token is active in local/hackathon testing
       appCheck = initializeAppCheck(app, {
-        provider: new ReCaptchaEnterpriseProvider("debug-placeholder-site-key"),
+        provider: new ReCaptchaV3Provider("debug-placeholder-site-key"),
         isTokenAutoRefreshEnabled: true,
       });
     }
