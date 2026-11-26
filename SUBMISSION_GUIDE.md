@@ -106,4 +106,4 @@ GitHub (Apache 2.0): https://github.com/rokeyaag/hybrid-ai-workspace
 - **Try it out / Live URL:** `https://build-hybrid-ai-2026-df4d2.web.app`
 - **GitHub Repository:** `https://github.com/rokeyaag/hybrid-ai-workspace`
 - **Image Gallery:** Upload the 6 screenshots from `demo/screenshots/`
-- **Video Demo Link:** Paste your public YouTube link after uploading `demo/hybrid-ai-workspace-demo.mp4`
+- **Video Demo Link:** `https://youtu.be/SY2HtK2uOx4`
