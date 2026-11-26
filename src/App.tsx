@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { onAuthStateChanged, type User } from "firebase/auth";
-import { Cpu, ShieldCheck, UserCircle2, WifiOff } from "lucide-react";
+import { ShieldCheck, UserCircle2, WifiOff } from "lucide-react";
 import { AuthModal } from "./components/AuthModal";
 import { RoutingInspector } from "./components/RoutingInspector";
 import { WorkspacePanel } from "./components/WorkspacePanel";
@@ -62,9 +62,11 @@ export default function App() {
     <div className="app-shell">
       <header className="top-nav">
         <div className="brand">
-          <div className="brand-icon">
-            <Cpu size={18} />
-          </div>
+          <img
+            src="/logo.png"
+            alt="Hybrid AI Workspace Monogram"
+            className="brand-logo"
+          />
           <div>
             <h1>Hybrid AI Workspace</h1>
             <p className="brand-subtitle">
