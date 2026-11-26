@@ -9,6 +9,9 @@ dist-ssr/
 *.local
 *.tsbuildinfo
 
+# Local demo media outputs
+demo/
+
 # Environment variables (never commit real Firebase keys/tokens)
 .env
 .env.local
