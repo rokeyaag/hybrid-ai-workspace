@@ -73,15 +73,23 @@ export function getFirebaseServices(): FirebaseServices {
 
   if (typeof window !== "undefined") {
     const globalScope = window as unknown as Record<string, unknown>;
-    if (debugTokenEnv === "true") {
-      globalScope.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-      appCheckMode = "debug";
-    } else if (debugTokenEnv && debugTokenEnv.trim().length > 0) {
-      globalScope.FIREBASE_APPCHECK_DEBUG_TOKEN = debugTokenEnv.trim();
-      appCheckMode = "debug";
+    const hasSiteKey = Boolean(siteKey && siteKey.trim().length > 0);
+    const isLocalhost =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1";
+
+    // Only activate debug token on localhost (or when no reCAPTCHA site key is configured)
+    if (!hasSiteKey || isLocalhost) {
+      if (debugTokenEnv === "true") {
+        globalScope.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+        appCheckMode = "debug";
+      } else if (debugTokenEnv && debugTokenEnv.trim().length > 0) {
+        globalScope.FIREBASE_APPCHECK_DEBUG_TOKEN = debugTokenEnv.trim();
+        appCheckMode = "debug";
+      }
     }
 
-    if (siteKey && siteKey.trim().length > 0) {
+    if (hasSiteKey && siteKey) {
       const provider =
         providerType === "enterprise"
           ? new ReCaptchaEnterpriseProvider(siteKey.trim())
