@@ -54,4 +54,56 @@ Teams and individuals want AI assistance inside their notes and documents, but s
 - **Frontend:** React 19, TypeScript, Vite, and custom dark-mode UI components.
 - **Firebase AI Logic (`firebase/ai`):** `getAI` with `GoogleAIBackend`, `getGenerativeModel` configured with `InferenceMode` (`PREFER_ON_DEVICE`, `ONLY_ON_DEVICE`, `PREFER_IN_CLOUD`, `ONLY_IN_CLOUD`), `inCloudParams`, and `initializeDeviceModel`.
 - **Firebase App Check:** Enforces attestation on AI calls (`ReCaptchaV3Provider` / `ReCaptchaEnterpriseProvider` and `FIREBASE_APPCHECK_DEBUG_TOKEN` support).
-- **Firebase Remote Config, Auth & Firestore:** Remote Config dynamically manages the default inference mode, fallback model name, and PII shield defaults; Firebase Auth (Google & Anonymous) secures per-user Firestore collections via `firestore.rules`.
+- **Firebase Remote Config, Auth & Firestore:** Remote Config dynamically manages the default inference mode, fallback model name (`gemini-3.5-flash-lite`), and PII shield defaults; Firebase Auth (Google & Anonymous) secures per-user Firestore collections via `firestore.rules`.
+
+#### Challenges we ran into
+- **Deprecated Cloud Fallback Model & App Check Enforcement:** Early during testing, `gemini-2.5-flash-lite` returned `404` for new projects, and Firebase Hosting's live `.web.app` domain rejected localhost App Check debug tokens (`401`). We upgraded the fallback model to `gemini-3.5-flash-lite` via Remote Config defaults and implemented automatic hostname-aware App Check routing (`ReCaptchaEnterpriseProvider` via Google Cloud Fraud Defense in production, debug tokens on `localhost`).
+- **On-Device Browser Variance:** Not every desktop browser exposes Chrome's Built-in AI (`LanguageModel`) API, so testing both strict local failure modes and seamless cloud fallback was essential to verify consistent UX across browsers.
+
+#### Accomplishments that we're proud of
+- Zero-server hybrid AI architecture using a single `firebase/ai` SDK across offline local storage, on-device Gemini Nano, and Cloud Gemini fallback.
+- Real-time **Hybrid Routing Inspector** that proves `inferenceSource` (`on_device` vs `in_cloud`), latency, and local PII scrubbing live in the UI.
+- Full production deployment on Firebase Hosting protected by Google Cloud Fraud Defense (App Check) and per-user Firestore rules.
+
+#### What we learned
+- Designing around `InferenceMode.PREFER_ON_DEVICE` requires treating connectivity and local model availability as first-class UI states (`LanguageModel.availability()`, `initializeDeviceModel()`, and offline persistence).
+- Enforcing Firebase App Check with Google Cloud Fraud Defense protects client-side Gemini endpoints cleanly without managing a custom API proxy.
+
+#### What's next for Hybrid AI Workspace
+- Multi-note RAG retrieval combining local embeddings with Cloud Gemini long-context synthesis.
+- Mobile companion builds (Android Gemini Nano & iOS Apple Foundation Models) syncing to the same Firestore workspace.
+
+---
+
+## 3. YouTube Upload Details (Copy-Paste)
+
+- **Title:** `Hybrid AI Workspace — On-Device Gemini Nano & Cloud Fallback (#BuildHybridAI 2026)`
+- **Visibility:** `Public`
+- **Subtitles File:** Upload `demo/subtitles.srt` in YouTube Studio
+- **Description:**
+```text
+Hybrid AI Workspace — Built for #BuildHybridAI 2026 (Google Firebase Hackathon)
+
+A privacy-first, offline-capable AI knowledge workspace powered by Firebase AI Logic Hybrid Inference:
+• Runs prompts on-device with Chrome Gemini Nano (InferenceMode.PREFER_ON_DEVICE)
+• Automatically falls back to Cloud Gemini 3.5 Flash Lite when unavailable
+• Local PII Privacy Shield scrubs emails, phone numbers, cards & API keys before leaving the browser
+• Protected by Firebase App Check (Google Cloud Fraud Defense), Firebase Auth, Cloud Firestore & Remote Config
+
+Live Demo: https://build-hybrid-ai-2026-df4d2.web.app
+GitHub (Apache 2.0): https://github.com/rokeyaag/hybrid-ai-workspace
+```
+- **Tags:** `Firebase, Firebase AI Logic, Gemini Nano, BuildHybridAI, Hybrid Inference, App Check, Google AI, React, TypeScript`
+
+---
+
+## 4. Devpost Form Field Checklist
+
+- **Project Name:** `Hybrid AI Workspace`
+- **Elevator Pitch / Tagline:** `Privacy-first, offline-capable AI workspace powered by Firebase AI Logic Hybrid Inference (Gemini Nano on-device + Cloud Gemini fallback).`
+- **Platform:** `Web`
+- **Built With:** `firebase`, `firebase-ai-logic`, `gemini-nano`, `gemini`, `app-check`, `firestore`, `firebase-auth`, `remote-config`, `react`, `typescript`, `vite`
+- **Try it out / Live URL:** `https://build-hybrid-ai-2026-df4d2.web.app`
+- **GitHub Repository:** `https://github.com/rokeyaag/hybrid-ai-workspace`
+- **Image Gallery:** Upload the 6 screenshots from `demo/screenshots/`
+- **Video Demo Link:** Paste your public YouTube link after uploading `demo/hybrid-ai-workspace-demo.mp4`
